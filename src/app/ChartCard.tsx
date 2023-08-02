@@ -1,21 +1,19 @@
 import React from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
 import {Chart} from "@/app/chart";
-import {getData} from "@/app/api/measuresApi";
+import {PerformanceEntries} from "@/app/api/performanceEntriesApi";
 
-export const Show = async () => {
-    const measures = await getData()
+export const ChartCard = ({performanceEntries}: {performanceEntries: PerformanceEntries}) => {
 
     return (
-        <Card>
+        <Card className={'w-full'}>
             <CardHeader>
                 <CardTitle>Overview</CardTitle>
-                <CardDescription>Overview description</CardDescription>
+                <CardDescription>Average resource fetching duration</CardDescription>
             </CardHeader>
             <CardContent>
-                <Chart data={measures.metrics} />
+                <Chart performanceEntries={performanceEntries} />
             </CardContent>
         </Card>
     );
 };
-

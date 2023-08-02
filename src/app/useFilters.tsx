@@ -1,40 +1,29 @@
-import {useState} from "react";
-import {Measures} from "@/app/api/measuresApi";
+import React, {useState} from "react";
+import {PerformanceEntry} from "@/app/api/performanceEntriesApi";
+import {isCached, isCrossOrigin} from "@/app/measuresMappers";
 
-export function useFilters(props: { data: Measures['metrics'] }) {
+interface Filters {
+    cache: boolean,
+    crossOrigin: boolean
+}
 
-    const [filters, setFilters] = useState<{ 404: boolean, cache: boolean }>({
-        404: false,
-        cache: false,
+export function useFilters(entries: PerformanceEntry[]) {
+
+    const [filters, setFilters] = useState<Filters>({
+        cache: true,
+        crossOrigin: true
     })
-    const filter404Data = (event: any) => {
-        const isActive = event.target.getAttribute('aria-pressed') === 'true';
+
+    const chartData = entries
+        .filter((entry) => !filters.crossOrigin ? !isCrossOrigin(entry) : true)
+        .filter((entry) => !filters.cache ? !isCached(entry) : true)
+
+    const filterData = (isPressed: boolean,filter: keyof Filters) => {
         setFilters((filters) => ({
             ...filters,
-            404: !isActive
+            [filter]: isPressed
         }))
     }
 
-    const filterCachedData = (event: any) => {
-        const isActive = event.target.getAttribute('aria-pressed') === 'true';
-        setFilters((filters) => ({
-            ...filters,
-            cache: !isActive
-        }))
-    }
-
-    const chartData = props.data
-        .filter((entry) => filters.cache ? !isCached(entry) : true)
-        .filter((entry) => filters["404"] ? !is404(entry) : true)
-
-
-    return {filter404Data, filterCachedData, chartData};
-}
-
-function isCached(entry: any) {
-    return entry.transferSize === 0
-}
-
-function is404(entry: any) {
-    return entry.responseStatus === 404
+    return {filterData, chartData, filters};
 }
