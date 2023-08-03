@@ -14,15 +14,15 @@ export interface PerformanceSessionsDto {
         }>
     }>
 }
-
+export interface Session {
+     id: string
+     timeStamp: number
+     entries: PerformanceEntry[]
+     cachedCount: number
+ }
 export interface PerformanceSessions {
     userId: string
-    sessions: Array<{
-        id: string
-        timeStamp: number
-        entries: PerformanceEntry[]
-        cachedCount: number
-    }>
+    sessions: Session[]
 }
 
 export interface PerformanceEntry {
@@ -36,7 +36,7 @@ export interface PerformanceEntry {
 }
 
 export async function getPerformanceSessions(): Promise<PerformanceSessions> {
-    const res = await fetch('http://localhost:3001/api/requests/id', {method: "GET", cache: "no-cache"}, )
+    const res = await fetch('http://localhost:3001/api/sessions/id', {method: "GET", cache: "no-cache"}, )
 
     if (!res.ok) {
         throw new Error('Failed to fetch data')

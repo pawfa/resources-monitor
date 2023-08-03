@@ -9,7 +9,6 @@ ChartJS.register(...registerables);
 export const Chart = ({data}: {data: PerformanceEntry[]}) => {
 
     return (
-        <div>
             <Bar data={
                 {
                     labels: data.map((row) => row.shortName),
@@ -22,6 +21,5 @@ export const Chart = ({data}: {data: PerformanceEntry[]}) => {
                     ],
                 }
             }/>
-        </div>
     );
 };

@@ -9,7 +9,7 @@ export function perfCheck() {
         const requests = list.getEntries().filter((entry)=> !entry.name.includes("/api"));
 
         if (requests.length > 0) {
-            fetch('/api/requests',{body:JSON.stringify({userId,sessionId, sessionTimestamp, requests}),method: 'PUT'})
+            fetch(`/api/sessions`,{body:JSON.stringify({userId,sessionId, sessionTimestamp, requests}),method: 'PUT'})
         }
     });
 
